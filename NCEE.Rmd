@@ -246,14 +246,14 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
   theme_minimal() +
   xlab("Year") +
   ylab("Number of Reg Prediction") +
-  ggtitle("3 Metropolis & Hainan Island") +
+  ggtitle("3 Metropolises & Hainan") +
   theme(plot.title = element_text(hjust = 0.5))
 
 pl2 <-
-pro_bind %>% subset(province %in% c("Qinghai", "Ningxia","Xizang")) %>%
+pro_bind %>% subset(province %in% c("Qinghai", "Ningxia","Xizang", "Xinjiang")) %>%
 ggplot(aes(year_prd, city.fit.nu, color=province)) + 
   geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
-      scale_color_manual(values=wes_palette("Rushmore1",3)) +
+      scale_color_manual(values=wes_palette("Rushmore1",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
   xlab("Year") +
@@ -310,15 +310,15 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 pl7 <-
-pro_bind %>% subset(province %in% c("Hunan", "Hubei","Anhui","Henan","Shandong")) %>%
+pro_bind %>% subset(province %in% c("Hunan", "Hubei","Henan","Shandong")) %>%
 ggplot(aes(year_prd, city.fit.nu, color=province)) + 
   geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
-      scale_color_manual(values=wes_palette("Cavalcanti1",5)) +
+      scale_color_manual(values=wes_palette("Cavalcanti1",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
   xlab("Year") +
   ylab("Number of Reg Prediction") +
-  ggtitle("North-Central 5 provinces") +
+  ggtitle("North-Central 4 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
 
 pl8 <-
