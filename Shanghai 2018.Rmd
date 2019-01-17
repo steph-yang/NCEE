@@ -47,8 +47,8 @@ data.frame(statistics, Year_2017, Year_2018)
 
 score_table%>%
 ggplot(aes(x=score)) + 
-  geom_histogram(data=subset(score_table, year == "2018"),fill = "#F4A582", binwidth = 0.5) +
-  geom_histogram(data=subset(score_table, year == "2017"),fill = "#92C5DE", binwidth = 0.5) +
+  geom_histogram(data=subset(score_table, year == "2018"),fill = "#F4A582", binwidth = 0.5,alpha = 0.6) +
+  geom_histogram(data=subset(score_table, year == "2017"),fill = "#92C5DE", binwidth = 0.5,alpha = 0.6) +
     scale_colour_manual("Density", values = c("#F4A582", "#92C5DE")) +
   geom_vline(xintercept=mean_2018, color = "#D6604D",size=0.6) +
   geom_vline(xintercept=median_2018, color = "#D6604D",size=0.6) +
@@ -88,12 +88,12 @@ mean_2018 <-round(mean(ZJ18[-1]))
 median_2018 <- median(ZJ18[-1])
 lowQ_2018 <- quantile(ZJ18[-1])[2]
 highQ_2018 <- quantile(ZJ18[-1])[4]
-mode_2018 <- Zhejiang_2018[which.max(Zhejiang_2018$number),]$grade
+mode_2018 <- Zhejiang_2018[which.max(Zhejiang_2018$number),]$score
 mean_2017 <- round(mean(ZJ17[-1]))
 median_2017 <- median(ZJ17[-1])
 lowQ_2017 <- quantile(ZJ17[-1])[2]
 highQ_2017 <- quantile(ZJ17[-1])[4]
-mode_2017 <- Zhejiang_2017[which.max(Zhejiang_2017$X686),]$
+mode_2017 <- Zhejiang_2017[which.max(Zhejiang_2017$number),]$score
 range_18 <- range(ZJ17[-1])
 range_17 <- range(ZJ17[-1])
 
@@ -104,8 +104,8 @@ data.frame(statistics, Year_2017, Year_2018)
 
 score_table%>%
 ggplot(aes(x=score)) + 
-  geom_histogram(data=subset(score_table, year == "2018"),fill = "#F4A582", binwidth = 0.5) +
-  geom_histogram(data=subset(score_table, year == "2017"),fill = "#92C5DE", binwidth = 0.5) +
+  geom_histogram(data=subset(score_table, year == "2018"),fill = "#F4A582", binwidth = 0.5,alpha = 0.6) +
+  geom_histogram(data=subset(score_table, year == "2017"),fill = "#92C5DE", binwidth = 0.5,alpha = 0.6) +
     scale_colour_manual("Density", values = c("#F4A582", "#92C5DE")) +
   geom_vline(xintercept=mean_2018, color = "#D6604D",size=0.6) +
   geom_vline(xintercept=median_2018, color = "#D6604D",size=0.6) +
