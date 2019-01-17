@@ -1,0 +1,33 @@
+---
+title: "Shanghai 2018"
+output: html_document
+---
+
+```{r tidy=TRUE}
+setwd("C:/Users/un150/Downloads")
+Shanghai_2018 <- read.csv("Shanghai 2018.csv")[,1:2]
+library(ggplot2); library(wesanderson); library(tidyverse)
+SH18 <- NA
+for(i in 1:nrow(Shanghai_2018)){
+  SH18 <- c(SH18,rep(Shanghai_2018[i,1], Shanghai_2018[i,2]))
+}
+SH18 <- data.frame(SH18[-1])
+
+mean_2018 <- mean(SH18$SH18..1.)
+median_2018 <- quantile(SH18$SH18..1.)[3]
+lowQ_2018 <- quantile(SH18$SH18..1.)[2]
+highQ_2018 <- quantile(SH18$SH18..1.)[4]
+mode_2018 <- Shanghai_2018[which.max(Shanghai_2018$number),]$grade
+
+ggplot(data=SH18, aes(SH18$SH18..1.)) + 
+  geom_histogram(binwidth = 0.5, alpha=0.5) + 
+  geom_density(alpha=.2, fill="#FF6666") +
+  geom_vline(xintercept=c(mean_2018,median_2018,mode_2018), color = c("coral","royalblue","seagreen4"),size=1.3) +
+    theme_minimal() +
+    ggtitle("Shanghai NCEE Score Distribution 2018") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    xlab("Score") +
+    ylab("Number of Students")
+
+
+```
