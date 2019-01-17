@@ -3,9 +3,9 @@ title: "NCEE"
 author: "Stephanie Yang jy2777"
 date: "1/16/2019"
 output:
-  word_document: default
   pdf_document: default
   html_document: default
+  word_document: default
 ---
 
 ```{r tidy=TRUE}
@@ -215,7 +215,7 @@ city.fit.nu <- as.vector(t(city.fit[,2:32]))
 city.high <- NCEE_function(NCEE_JHS,NCEE_reg)[[4]]
 city.high.nu <- as.vector(t(city.high[,2:32]))
 
-year_prd <- c(rep("2023",31),rep("2022",31),rep("2021",31),rep("2020",31),rep("2019",31))
+year_prd <- c(rep("23",31),rep("22",31),rep("21",31),rep("20",31),rep("19",31))
 
 pro_bind <- data.frame(year_prd, province=rep(province,5),city.low.nu,city.fit.nu,city.high.nu)
 
@@ -316,20 +316,22 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 # =====Display===== #
-layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))
-pl1; pl2; pl3; pl4; pl5; pl6; pl7; pl8
+
+grid.arrange(pl1, pl2, pl3, pl4, nrow = 2)
+grid.arrange(pl5, pl6, pl7, pl8, nrow = 2)
+
 ```
 
 
 ```{r tidy=TRUE}
-ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 
-  geom_path(show.legend = F) +
-  ggtitle("Map of China") +
-  geom_polygon()
+# ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 
+#  geom_path(show.legend = F) +
+#  ggtitle("Map of China") +
+#  geom_polygon()
 
-chinamap <-  readRDS("gadm36_CHN_0_sp.rds")
+#chinamap <-  readRDS("gadm36_CHN_0_sp.rds")
 
-ggplot(chinamap, aes(long, lat, group=group)) +
-  geom_polygon(fill="white", colour="gray") +
-  ggtitle("Map of China")
+#ggplot(chinamap, aes(long, lat, group=group)) +
+#  geom_polygon(fill="white", colour="gray") +
+#  ggtitle("Map of China")
 ```
