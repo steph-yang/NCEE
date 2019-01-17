@@ -1,0 +1,335 @@
+---
+title: "NCEE"
+author: "Stephanie Yang jy2777"
+date: "1/16/2019"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r tidy=TRUE}
+setwd("C:/Users/un150/Downloads");library(ggplot2);library(gridExtra); library(tidyverse);library(wesanderson);library(maps);library(mapdata);library(sp)
+
+NCEE_reg <- read.csv("NCEE_reg.csv")[1:31,];province <<- c(as.character(NCEE_reg[,1]))
+rownames(NCEE_reg) <- province
+NCEE_reg <- NCEE_reg[,-1]
+
+NCEE_JHS <- read.csv("NCEE_JHS.csv")
+```
+
+
+```{r tidy=TRUE}
+# =====Plot for National Data Trend===== #
+NCEE_national <- read.csv("national data.csv")
+national_reg <- NCEE_national$Reg[1:14]
+national_JHS <- NCEE_national$JHS[7:20]/30000
+year_born <- c(2000:1987)
+
+population <- c(national_JHS,national_reg)
+label <- c(rep("JHS",14),rep("NCEE Reg",14))
+year_birth <- rep(year_born,2)
+plot_df <- data.frame(population,label,year_birth)
+
+p1 <- ggplot(data=plot_df, aes(x=year_birth, y= population, fill=label)) +
+geom_bar(stat="identity", color="grey", position=position_dodge()) +
+  theme_minimal() +
+  scale_fill_brewer(palette="Blues") +
+  ggtitle("National Data from 1987 to 2000") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Year of Birth")
+
+# =====Plot for Beijing Data Trend===== #
+
+Beijing_JHS <- as.numeric(NCEE_JHS[1,7:19])/30000  #2012-2000
+Beijing_reg <- as.numeric(NCEE_reg[1,1:13])/10000 # 2018-2006
+label_city <- c(rep("JHS",13),rep("NCEE Reg",13))
+year_born <- c(2000:1988)
+year_birth <- rep(year_born,2)
+Beijing_population <- c(Beijing_JHS,Beijing_reg)
+plot_beijing <- data.frame(Beijing_population,label_city,year_birth)
+
+p2 <- ggplot(data=plot_beijing, aes(x=year_birth, y= Beijing_population, fill=label_city)) +
+geom_bar(stat="identity", color="grey", position=position_dodge()) +
+  theme_minimal() +
+  scale_fill_brewer(palette="Reds") +
+  ggtitle("Beijing Data from 1987 to 2000") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Year of Birth")
+
+# =====Plot for Henan Data Trend===== #
+
+Henan_JHS <- as.numeric(NCEE_JHS[16,7:19])/30000  #2012-2000
+Henan_reg <- as.numeric(NCEE_reg[16,1:13])/10000 # 2018-2006
+label_city <- c(rep("JHS",13),rep("NCEE Reg",13))
+year_born <- c(2000:1988)
+year_birth <- rep(year_born,2)
+Henan_population <- c(Henan_JHS,Henan_reg)
+plot_Henan <- data.frame(Henan_population,label_city,year_birth)
+
+p3 <- ggplot(data=plot_Henan, aes(x=year_birth, y= Henan_population, fill=label_city)) +
+geom_bar(stat="identity", color="grey", position=position_dodge()) +
+  theme_minimal() +
+  scale_fill_brewer(palette="Greens") +
+  ggtitle("Henan Data from 1987 to 2000") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Year of Birth")
+
+# =====Plot for Shanxi Data Trend===== #
+
+Xinjiang_JHS <- as.numeric(NCEE_JHS[31,7:19])/30000  #2012-2000
+Xinjiang_reg <- as.numeric(NCEE_reg[31,1:13])/10000 # 2018-2006
+label_city <- c(rep("JHS",13),rep("NCEE Reg",13))
+year_born <- c(2000:1988)
+year_birth <- rep(year_born,2)
+Xinjiang_population <- c(Xinjiang_JHS,Xinjiang_reg)
+plot_Xinjiang <- data.frame(Xinjiang_population,label_city,year_birth)
+
+p4 <- ggplot(data=plot_Xinjiang, aes(x=year_birth, y= Xinjiang_population, fill=label_city)) +
+geom_bar(stat="identity", color="grey", position=position_dodge()) +
+  theme_minimal() +
+  scale_fill_brewer(palette="OrRd") +
+  ggtitle("Xinjiang Data from 1987 to 2000") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Year of Birth")
+
+# =====Display===== #
+grid.arrange(p1, p2, p3, p4, nrow = 2)
+
+```
+
+```{r tidy=TRUE}
+# =====Fit linear model for 31 provinces===== #
+NCEE_JHS
+NCEE_function <- function(JHS, reg){
+  intercept <- rep(NA, 31)
+  slope <- rep(NA, 31)
+  cor <- rep(NA,31)
+  predict_year <- c("2023","2022","2021","2020","2019")
+  prd_df <- data.frame(predict_year)
+  prd_low <- data.frame(predict_year)
+  prd_high <- data.frame(predict_year)
+  
+  for(i in 1:31){
+    city_JHS <- as.numeric(JHS[i,7:18])/30000 # 2012-2001
+    city_reg <- as.numeric(reg[i,1:12])/10000 # 2018-2007
+    city_lm.i <- lm(city_reg~city_JHS)
+    
+    intercept[i] <- as.numeric(city_lm.i$coefficients[1])
+    slope[i] <- as.numeric(city_lm.i$coefficients[2])
+    cor[i] <- cor(city_JHS,city_reg)
+    
+    predict_city <-predict(city_lm.i,newdata=data.frame(city_JHS=as.numeric(NCEE_JHS[i,2:6])/30000))
+    predict_city_low <-predict(city_lm.i,newdata=data.frame(city_JHS=as.numeric(NCEE_JHS[i,2:6])/30000), interval = "confidence")[,2]
+    predict_city_high <-predict(city_lm.i,newdata=data.frame(city_JHS=as.numeric(NCEE_JHS[i,2:6])/30000), interval = "confidence")[,3]
+    
+    prd_df <- data.frame(prd_df, predict_city)
+    prd_low <- data.frame(prd_low, predict_city_low)
+    prd_high <- data.frame(prd_high, predict_city_high)
+    
+  }
+  
+  colnames(prd_df) <- c("year", province)
+  colnames(prd_low) <- c("year", province)
+  colnames(prd_high) <- c("year", province)
+  
+  summ <- data.frame(province,intercept,slope,cor)
+  
+  return(list(summ, prd_df,prd_low,prd_high))
+}
+
+
+# Sum up all province prediction as the national total
+predict_national <- rep(NA,5)
+for (i in 1:5) {
+  predict_national[i] <- sum(as.numeric(NCEE_function(NCEE_JHS,NCEE_reg)[[2]][i,]))
+} # 2023-2019
+```
+
+```{r tidy=TRUE}
+# =====Use National JHS as Predictors===== #
+
+JHS_total <- NCEE_national$JHS[7:17]/30000
+Reg_total <- NCEE_national$Reg[1:11]
+new.data <-  NCEE_national$JHS[2:6]/30000
+
+test <- data.frame(JHS_total, Reg_total)
+
+predict_national2 <- predict(lm(Reg_total~JHS_total, data = test),newdata=data.frame(JHS_total=new.data), interval = "confidence") 
+predict_national;predict_national2
+```
+
+```{r tidy=TRUE}
+# =====Plot prediction result===== #
+
+national_reg <- c(rep(0,5),NCEE_national$Reg[1:14])
+national_JHS <- NCEE_national$JHS[2:20]/30000
+year_born <- c(2005:1987)
+predict_national_t <- c(rep(NA,19),predict_national,national_reg[6:19])
+
+predict_national_pf <- c(rep(NA,19),prd_fit <- predict_national2[,1],national_reg[6:19])
+predict_national_pl <- c(rep(NA,19),prd_fit <- predict_national2[,2],rep(NA,14))
+predict_national_ph <- c(rep(NA,19),prd_fit <- predict_national2[,3],rep(NA,14))
+
+population <- c(national_JHS,national_reg)
+label <- c(rep("JHS",19),rep("NCEE Reg",19))
+year_birth <- rep(year_born,2)
+
+plot_df <- data.frame(population,label,year_birth,predict_national_t,predict_national_pf,predict_national_pl,predict_national_ph)
+
+ggplot(data=plot_df, aes(x=year_birth, y= population, fill=label)) +
+  geom_bar(stat="identity", color="grey", position=position_dodge()) +
+  geom_point(aes(x=year_birth, y=predict_national_pf),color='cornflowerblue',shape=17) +
+  geom_point(aes(x=year_birth, y=predict_national_t)) +
+  geom_line(aes(x=year_birth, y=predict_national_pf),linetype="dotted") +
+  geom_line(aes(x=year_birth, y=predict_national_t),linetype="dotted") +
+  geom_ribbon(aes(ymin=predict_national_pl, ymax=predict_national_ph,x=year_birth), linetype=2, alpha=0.4) +
+    theme_minimal() +
+    scale_fill_brewer(palette="Blues") +
+    ggtitle("National Prediction from 1987 to 2000") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    xlab("Year of Birth")
+
+new_born <- c(2005:2001)
+new_plot <- data.frame(new_born,predict_national,predict_national2[,1],predict_national2[,2],predict_national2[,3])
+
+ggplot(data=new_plot) +
+  geom_line(aes(x=new_born, y=predict_national2[,1]),linetype="dotted",color='cornflowerblue') +
+  geom_line(aes(x=new_born, y=predict_national),linetype="dotted") +
+  geom_point(aes(x=new_born, y=predict_national2[,1]),color='cornflowerblue',shape=17, size=3) +
+  geom_point(aes(x=new_born, y=predict_national), size=3) +
+  geom_ribbon(aes(ymin=predict_national2[,2], ymax=predict_national2[,3],x=new_born), linetype=2, alpha=0.1) +
+    xlab("Year of Birth") +
+    ylab("Number of NCEE Reg prediction") +
+    ggtitle("Detailed Prediction for newborn from 2001 to 2005") +
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5))
+    
+```
+
+```{r tidy=TRUE}
+city.low <- NCEE_function(NCEE_JHS,NCEE_reg)[[3]]
+city.low.nu <- as.vector(t(city.low[,2:32]))
+city.fit <- NCEE_function(NCEE_JHS,NCEE_reg)[[2]]
+city.fit.nu <- as.vector(t(city.fit[,2:32]))
+city.high <- NCEE_function(NCEE_JHS,NCEE_reg)[[4]]
+city.high.nu <- as.vector(t(city.high[,2:32]))
+
+year_prd <- c(rep("2023",31),rep("2022",31),rep("2021",31),rep("2020",31),rep("2019",31))
+
+pro_bind <- data.frame(year_prd, province=rep(province,5),city.low.nu,city.fit.nu,city.high.nu)
+
+pl1 <- 
+pro_bind %>% subset(province %in% c("Beijing", "Tianjin","Shanghai", "Hainan")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+    scale_color_manual(values=wes_palette("Moonrise2",4)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("3 Metropolis & Hainan Island") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl2 <-
+pro_bind %>% subset(province %in% c("Qinghai", "Ningxia","Xizang")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("Rushmore1",3)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("West 4 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl3 <-
+pro_bind %>% subset(province %in% c("Heilongjiang", "Jilin","Liaoning","Neimenggu")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("Zissou1",4)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("North-East 4 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl4 <- 
+pro_bind %>% subset(province %in% c("Sichuan", "Guizhou","Yunnan","Guangxi","Chongqing")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("Darjeeling1",5)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("South-West 5 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl5 <-
+pro_bind %>% subset(province %in% c("Zhejiang", "Jiangsu","Anhui")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("FantasticFox1",3)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("South-East cost 3 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl6 <-
+pro_bind %>% subset(province %in% c("Guangdong", "Fujian","Jiangxi")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("GrandBudapest1",3)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("South-Coast 3 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl7 <-
+pro_bind %>% subset(province %in% c("Hunan", "Hubei","Anhui","Henan","Shandong")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("Cavalcanti1",5)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("North-Central 5 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+pl8 <-
+pro_bind %>% subset(province %in% c("Shanxi", "Shaanxi","Hebei","Gansu")) %>%
+ggplot(aes(year_prd, city.fit.nu, color=province)) + 
+  geom_pointrange(aes(ymin = city.low.nu, ymax = city.high.nu)) +
+      scale_color_manual(values=wes_palette("Rushmore",4)) +
+  geom_line(aes(group = province)) +
+  theme_minimal() +
+  xlab("Year") +
+  ylab("Number of Reg Prediction") +
+  ggtitle("West-Central 4 provinces") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# =====Display===== #
+layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE))
+pl1; pl2; pl3; pl4; pl5; pl6; pl7; pl8
+```
+
+
+```{r tidy=TRUE}
+ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 
+  geom_path(show.legend = F) +
+  ggtitle("Map of China") +
+  geom_polygon()
+
+chinamap <-  readRDS("gadm36_CHN_0_sp.rds")
+
+ggplot(chinamap, aes(long, lat, group=group)) +
+  geom_polygon(fill="white", colour="gray") +
+  ggtitle("Map of China")
+```
