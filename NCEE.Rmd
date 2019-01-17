@@ -53,7 +53,7 @@ p1 <- ggplot(data=plot_df, aes(x=year_birth, y= population, fill=label)) +
 geom_bar(stat="identity", color="grey", position=position_dodge()) +
   theme_minimal() +
   scale_fill_brewer(palette="Blues") +
-  ggtitle("National Data from 1987 to 2000") +
+  ggtitle("Total-Cohort from 1987 to 2000") +
   theme(plot.title = element_text(hjust = 0.5)) +
   xlab("Year of Birth")
 
@@ -71,7 +71,7 @@ p2 <- ggplot(data=plot_beijing, aes(x=year_birth, y= Beijing_population, fill=la
 geom_bar(stat="identity", color="grey", position=position_dodge()) +
   theme_minimal() +
   scale_fill_brewer(palette="Reds") +
-  ggtitle("Beijing Data from 1987 to 2000") +
+  ggtitle("Beijing-Cohort from 1987 to 2000") +
   theme(plot.title = element_text(hjust = 0.5)) +
   xlab("Year of Birth")
 
@@ -89,7 +89,7 @@ p3 <- ggplot(data=plot_Henan, aes(x=year_birth, y= Henan_population, fill=label_
 geom_bar(stat="identity", color="grey", position=position_dodge()) +
   theme_minimal() +
   scale_fill_brewer(palette="Greens") +
-  ggtitle("Henan Data from 1987 to 2000") +
+  ggtitle("Henan-Cohort from 1987 to 2000") +
   theme(plot.title = element_text(hjust = 0.5)) +
   xlab("Year of Birth")
 
@@ -107,7 +107,7 @@ p4 <- ggplot(data=plot_Xinjiang, aes(x=year_birth, y= Xinjiang_population, fill=
 geom_bar(stat="identity", color="grey", position=position_dodge()) +
   theme_minimal() +
   scale_fill_brewer(palette="OrRd") +
-  ggtitle("Xinjiang Data from 1987 to 2000") +
+  ggtitle("Xinjiang-Cohort from 1987 to 2000") +
   theme(plot.title = element_text(hjust = 0.5)) +
   xlab("Year of Birth")
 
@@ -204,7 +204,7 @@ ggplot(data=plot_df, aes(x=year_birth, y= population, fill=label)) +
   geom_ribbon(aes(ymin=predict_national_pl, ymax=predict_national_ph,x=year_birth), linetype=2, alpha=0.4) +
     theme_minimal() +
     scale_fill_brewer(palette="Blues") +
-    ggtitle("National Prediction from 1987 to 2000") +
+    ggtitle("National Data from Cohort 1987 to 2000 and Prediction") +
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Year of Birth")
 
