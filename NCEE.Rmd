@@ -36,7 +36,7 @@ ggplot(data=reg_full, aes(x=year_test, y=national_reg_full)) +
   ggtitle("National Data from 1997 to 2018") +
   theme(plot.title = element_text(hjust = 0.5)) +
   xlab("Year of Exam") +
-  ylab("Number of Registration")
+  ylab("Total Registration")
 ```
 
 
