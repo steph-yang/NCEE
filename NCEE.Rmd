@@ -20,11 +20,29 @@ NCEE_JHS <- read.csv("NCEE_JHS.csv")
 
 
 ```{r tidy=TRUE}
-# =====Plot for National Data Trend===== #
+# =====Plot for National Data Trend 1987~2018===== #
 NCEE_national <- read.csv("national data.csv")
 national_reg <- NCEE_national$Reg[1:14]
 national_JHS <- NCEE_national$JHS[7:20]/30000
 year_born <- c(2000:1987)
+year_test <- c(2018:1997)
+national_reg_full <- NCEE_national$Reg[1:22]
+
+reg_full <- data.frame(year_test, national_reg_full)
+
+ggplot(data=reg_full, aes(x=year_test, y=national_reg_full)) +
+  geom_bar(stat="identity", fill="tan3", position=position_dodge()) +
+  theme_minimal() +
+  ggtitle("National Data from 1997 to 2018") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  xlab("Year of Exam") +
+  ylab("Number of Registration")
+```
+
+
+```{r tidy=TRUE}
+
+# =====Plot for National Data Trend===== #
 
 population <- c(national_JHS,national_reg)
 label <- c(rep("JHS",14),rep("NCEE Reg",14))
