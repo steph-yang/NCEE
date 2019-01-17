@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r tidy=TRUE}
-setwd("C:/Users/un150/Downloads");library(ggplot2);library(gridExtra); library(tidyverse);library(wesanderson);library(maps);library(mapdata);library(sp)
+setwd("~/NCEE");library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
 
 NCEE_reg <- read.csv("NCEE_reg.csv")[1:31,];province <<- c(as.character(NCEE_reg[,1]))
 rownames(NCEE_reg) <- province
