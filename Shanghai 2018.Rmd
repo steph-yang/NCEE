@@ -71,51 +71,69 @@ ZJ18 <- NA
 for(i in 1:nrow(Zhejiang_2018)){
   ZJ18 <- c(ZJ18,rep(Zhejiang_2018[i,1], Zhejiang_2018[i,2]))
 }
+ZJ18 <- ZJ18[-1]
+
 Zhejiang_2017 <- read.csv("Zhejiang 2017.csv")[,1:2]
 ZJ17 <- NA
 for(i in 1:nrow(Zhejiang_2017)){
   ZJ17 <- c(ZJ17,rep(Zhejiang_2017[i,1], Zhejiang_2017[i,2]))
 }
+ZJ17 <- ZJ17[-1]
 
-score <- c(ZJ18[-1], ZJ17[-1])
-year <- c(rep(2018, length(ZJ18)-1),rep(2017, length(ZJ17)-1))
-city <- c(rep("Zhejiang", length(ZJ18)-1),rep("Zhejiang", length(ZJ17)-1))
+Zhejiang_2014 <- read.csv("Zhejiang 2014.csv")[,1:2]
+ZJ14 <- NA
+for(i in 1:nrow(Zhejiang_2014)){
+  ZJ14 <- c(ZJ14,rep(Zhejiang_2014[i,1], Zhejiang_2014[i,2]))
+}
+ZJ14 <- ZJ14[-1]
 
-score_table <- data.frame(score, year, city)
+score <- c(ZJ18, ZJ17, ZJ14)
+year <- c(rep(2018, length(ZJ18)),rep(2017, length(ZJ17)),rep(2014, length(ZJ14)))
 
+score_table <- data.frame(score, year)
 
-mean_2018 <-round(mean(ZJ18[-1]))
-median_2018 <- median(ZJ18[-1])
-lowQ_2018 <- quantile(ZJ18[-1])[2]
-highQ_2018 <- quantile(ZJ18[-1])[4]
+mean_2018 <-round(mean(ZJ18))
+median_2018 <- median(ZJ18)
+lowQ_2018 <- quantile(ZJ18)[2]
+highQ_2018 <- quantile(ZJ18)[4]
 mode_2018 <- Zhejiang_2018[which.max(Zhejiang_2018$number),]$score
-mean_2017 <- round(mean(ZJ17[-1]))
-median_2017 <- median(ZJ17[-1])
-lowQ_2017 <- quantile(ZJ17[-1])[2]
-highQ_2017 <- quantile(ZJ17[-1])[4]
+range_18 <- range(ZJ18)
+
+mean_2017 <- round(mean(ZJ17))
+median_2017 <- median(ZJ17)
+lowQ_2017 <- quantile(ZJ17)[2]
+highQ_2017 <- quantile(ZJ17)[4]
 mode_2017 <- Zhejiang_2017[which.max(Zhejiang_2017$number),]$score
-range_17 <- range(ZJ17[-1])
-range_17 <- range(ZJ17[-1])
+range_17 <- range(ZJ17)
+
+mean_2014 <- round(mean(ZJ14))
+median_2014 <- median(ZJ14)
+lowQ_2014 <- quantile(ZJ14)[2]
+highQ_2014 <- quantile(ZJ14)[4]
+mode_2014 <- Zhejiang_2014[which.max(Zhejiang_2014$number),]$score
+range_14 <- range(ZJ14)
 
 statistics <- c("lower range", "25% Q", "mean", "median", "mode","75% Q", "higher range")
 Year_2017 <- c(range_17[1], lowQ_2017, mean_2017, median_2017, mode_2017, highQ_2017, range_17[2])
 Year_2018 <- c(range_18[1], lowQ_2018, mean_2018, median_2018, mode_2018, highQ_2018, range_18[2])
-data.frame(statistics, Year_2017, Year_2018)
+Year_2014 <- c(range_14[1], lowQ_2014, mean_2014, median_2014, mode_2014, highQ_2014, range_14[2])
+data.frame(statistics, Year_2017, Year_2018, Year_2014)
 
 score_table%>%
 ggplot(aes(x=score)) + 
+  geom_histogram(data=subset(score_table, year == "2014"),fill = "brown", binwidth = 0.5,alpha = 0.6) +
   geom_histogram(data=subset(score_table, year == "2018"),fill = "olivedrab4", binwidth = 0.5,alpha = 0.6) +
   geom_histogram(data=subset(score_table, year == "2017"),fill = "#92C5DE", binwidth = 0.5,alpha = 0.6) +
-    scale_colour_manual("Density", values = c("#F4A582", "#92C5DE")) +
+  geom_vline(xintercept=mean_2014, color = "brown",size=0.6) +
+  geom_vline(xintercept=median_2014, color = "brown",size=0.6) +
   geom_vline(xintercept=mean_2018, color = "springgreen4",size=0.6) +
   geom_vline(xintercept=median_2018, color = "springgreen4",size=0.6) +
-  geom_vline(xintercept=mean_2017, color = "#4393C3",size=0.6) +
-  geom_vline(xintercept=median_2017, color = "#4393C3" ,size=0.6) +
+  geom_vline(xintercept=mean_2017, color = "royalblue",size=0.6) +
+  geom_vline(xintercept=median_2017, color = "royalblue",size=0.6) +
     theme_minimal() +
-    ggtitle("Zhejiang NCEE Score Distribution of 2018 and 2017") +
+    ggtitle("Zhejiang NCEE Score Distribution of 2018, 2017 and 2014") +
     theme(plot.title = element_text(hjust = 0.5)) +
     xlab("Score") +
     ylab("Number of Students")
-
 
 ```
