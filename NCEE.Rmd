@@ -16,12 +16,13 @@ rownames(NCEE_reg) <- province
 NCEE_reg <- NCEE_reg[,-1]
 
 NCEE_JHS <- read.csv("NCEE_JHS.csv")
+NCEE_national <- read.csv("national data.csv")
 ```
 
 
 ```{r tidy=TRUE}
 # =====Plot for National Data Trend 1987~2018===== #
-NCEE_national <- read.csv("national data.csv")
+
 national_reg <- NCEE_national$Reg[1:14]
 national_JHS <- NCEE_national$JHS[7:20]/30000
 year_born <- c(2000:1987)
