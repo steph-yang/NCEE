@@ -16,7 +16,7 @@
 
 *NCEE.Rmd*: for Q1: five-year (2019~2023) NCEE registration number prediction and visualization (by region and national total).
 
-*Shanghai 2018*. Rmd: for Q2: comparison between old and reformed NCEE scores of Shanghai and Zhejiang in recent years; visualization fo score distribution.
+*Shanghai 2018. Rmd*: for Q2: comparison between old and reformed NCEE scores of Shanghai and Zhejiang in recent years; visualization fo score distribution.
 
 ***PDF File***
 
