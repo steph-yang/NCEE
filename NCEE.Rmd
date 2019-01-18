@@ -8,10 +8,12 @@ output:
   word_document: default
 ---
 
-```{r tidy=TRUE}
-library(knitr)
-opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
-setwd("D:/NCEE");library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
+```{r tidy=TRUE,tidy.opts=list(width.cutoff=60)}
+# =====Load Packages and Dataset===== #
+wd <- getwd()
+rel <- file.path(wd,"dataset")
+setwd(rel)
+library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
 
 NCEE_reg <- read.csv("NCEE_reg.csv")[1:31,];province <<- c(as.character(NCEE_reg[,1]))
 rownames(NCEE_reg) <- province
@@ -22,7 +24,7 @@ NCEE_national <- read.csv("national data.csv")
 ```
 
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # =====Plot for National Data Trend 1987~2018===== #
 
 national_reg <- NCEE_national$Reg[1:14]
@@ -43,7 +45,7 @@ ggplot(data=reg_full, aes(x=year_test, y=national_reg_full)) +
 ```
 
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 
 # =====Plot for National Data Trend===== #
 
@@ -119,7 +121,7 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ```
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # =====Fit linear model for 31 provinces===== #
 NCEE_function <- function(JHS, reg){
   intercept <- rep(NA, 31)
@@ -158,6 +160,13 @@ NCEE_function <- function(JHS, reg){
   return(list(summ, prd_df,prd_low,prd_high))
 }
 
+NCEE_function(NCEE_JHS,NCEE_reg)
+
+path <- file.path(wd,"output")
+
+write.csv(NCEE_function(NCEE_JHS,NCEE_reg)[[2]], file.path(path, "province prediction_fit.csv"))
+write.csv(NCEE_function(NCEE_JHS,NCEE_reg)[[3]], file.path(path, "province prediction_low.csv"))
+write.csv(NCEE_function(NCEE_JHS,NCEE_reg)[[4]], file.path(path, "province prediction_high.csv"))
 
 # Sum up all province prediction as the national total
 predict_national <- rep(NA,5)
@@ -166,7 +175,7 @@ for (i in 1:5) {
 } # 2023-2019
 ```
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # =====Use National JHS as Predictors===== #
 
 JHS_total <- NCEE_national$JHS[7:17]/30000
@@ -179,7 +188,7 @@ predict_national2 <- predict(lm(Reg_total~JHS_total, data = test),newdata=data.f
 predict_national;predict_national2
 ```
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # =====Plot prediction result===== #
 
 national_reg <- c(rep(0,5),NCEE_national$Reg[1:14])
@@ -227,7 +236,7 @@ ggplot(data=new_plot) +
     
 ```
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 city.low <- NCEE_function(NCEE_JHS,NCEE_reg)[[3]]
 city.low.nu <- as.vector(t(city.low[,2:32]))
 city.fit <- NCEE_function(NCEE_JHS,NCEE_reg)[[2]]

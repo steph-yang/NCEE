@@ -5,12 +5,12 @@ output:
   html_document: default
 ---
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 setwd("D:/NCEE")
 library(ggplot2); library(wesanderson); library(dplyr)
 ```
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 Shanghai_2018 <- read.csv("Shanghai 2018.csv")[,1:2]
 SH18 <- NA
 for(i in 1:nrow(Shanghai_2018)){
@@ -65,7 +65,7 @@ ggplot(aes(x=score)) +
 ```
 
 
-```{r tidy=TRUE}
+```{r tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 Zhejiang_2018 <- read.csv("Zhejiang 2018.csv")[,1:2]
 ZJ18 <- NA
 for(i in 1:nrow(Zhejiang_2018)){
