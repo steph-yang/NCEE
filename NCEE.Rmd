@@ -9,7 +9,7 @@ output:
 ---
 
 ```{r tidy=TRUE}
-setwd("~/NCEE");library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
+setwd("D:/NCEE");library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
 
 NCEE_reg <- read.csv("NCEE_reg.csv")[1:31,];province <<- c(as.character(NCEE_reg[,1]))
 rownames(NCEE_reg) <- province
@@ -118,7 +118,6 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 
 ```{r tidy=TRUE}
 # =====Fit linear model for 31 provinces===== #
-NCEE_JHS
 NCEE_function <- function(JHS, reg){
   intercept <- rep(NA, 31)
   slope <- rep(NA, 31)
@@ -244,7 +243,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
     scale_color_manual(values=wes_palette("Moonrise2",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("3 Metropolises & Hainan") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -256,7 +255,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("Rushmore1",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("West 4 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -268,7 +267,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("Zissou1",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("North-East 4 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -280,7 +279,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("Darjeeling1",5)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("South-West 5 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -292,7 +291,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("FantasticFox1",3)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("South-East cost 3 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -304,7 +303,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("GrandBudapest1",3)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("South-Coast 3 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -316,7 +315,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("Cavalcanti1",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("North-Central 4 provinces") +
   theme(plot.title = element_text(hjust = 0.5))
@@ -328,7 +327,7 @@ ggplot(aes(year_prd, city.fit.nu, color=province)) +
       scale_color_manual(values=wes_palette("Rushmore",4)) +
   geom_line(aes(group = province)) +
   theme_minimal() +
-  xlab("Year") +
+  xlab("Year of Exam") +
   ylab("Number of Reg Prediction") +
   ggtitle("West-Central 4 provinces") +
   theme(plot.title = element_text(hjust = 0.5))

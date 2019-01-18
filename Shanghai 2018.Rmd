@@ -6,7 +6,7 @@ output:
 ---
 
 ```{r tidy=TRUE}
-setwd("~/NCEE")
+setwd("D:/NCEE")
 library(ggplot2); library(wesanderson); library(dplyr)
 ```
 
