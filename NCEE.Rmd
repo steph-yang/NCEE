@@ -9,6 +9,8 @@ output:
 ---
 
 ```{r tidy=TRUE}
+library(knitr)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 setwd("D:/NCEE");library(ggplot2);library(gridExtra); library(dplyr);library(wesanderson);library(maps);library(mapdata);library(sp)
 
 NCEE_reg <- read.csv("NCEE_reg.csv")[1:31,];province <<- c(as.character(NCEE_reg[,1]))
@@ -342,14 +344,6 @@ grid.arrange(pl5, pl6, pl7, pl8, nrow = 2)
 
 
 ```{r tidy=TRUE}
-# ggplot(map("china", plot=F), aes(long, lat, group=group, fill=region)) + 
-#  geom_path(show.legend = F) +
-#  ggtitle("Map of China") +
-#  geom_polygon()
 
-#chinamap <-  readRDS("gadm36_CHN_0_sp.rds")
 
-#ggplot(chinamap, aes(long, lat, group=group)) +
-#  geom_polygon(fill="white", colour="gray") +
-#  ggtitle("Map of China")
 ```
